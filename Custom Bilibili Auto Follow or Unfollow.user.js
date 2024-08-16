@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/Larch4/Custom-Bilibili-Auto-Follow-Unfollow
 // @version      1.0
 // @description  A script to automatically follow/unfollow on Bilibili with a start/pause button
 // @author       Larch4
