@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name                     Custom Bilibili Auto Follow/Unfollow
 // @namespace                https://github.com/Larch4/Custom-Bilibili-Auto-Follow-Unfollow
-// @version                  1.1
+// @version                  1.3
 // @description              A script to automatically follow/unfollow on Bilibili with a start/pause button
 // @author                   Larch4
 // @match                    https://space.bilibili.com/401742377
@@ -19,9 +19,9 @@
     panel.style.position = 'fixed';
     panel.style.bottom = '10px';
     panel.style.right = '10px';
-    panel.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    panel.style.color = '#fff';
-    panel.style.padding = '10px';
+    panel.style.backgroundColor = 'rgba(255, 75, 156, 0.918)';
+    panel.style.color = '#black';
+    panel.style.padding = '20px';
     panel.style.borderRadius = '5px';
     panel.style.zIndex = '10000';
     panel.innerHTML = `
