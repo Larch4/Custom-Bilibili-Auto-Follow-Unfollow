@@ -6,6 +6,7 @@
 // @author                   Larch4
 // @match                    https://space.bilibili.com/401742377
 // @grant                    none
+// @license                  GNU Affero General Public License v3.0
 // ==/UserScript==
 
 (function() {
