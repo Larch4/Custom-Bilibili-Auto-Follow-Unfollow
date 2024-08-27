@@ -4,7 +4,7 @@
 // @version                  1.3
 // @description              A script to automatically follow/unfollow on Bilibili with a start/pause button
 // @author                   Larch4
-// @match                    https://space.bilibili.com/401742377
+// @match                    https://space.bilibili.com/*
 // @grant                    none
 // @license                  GNU Affero General Public License v3.0
 // ==/UserScript==
