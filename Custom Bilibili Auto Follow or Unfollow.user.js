@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
 // @namespace    https://github.com/Larch4/Custom-Bilibili-Auto-Follow-Unfollow
-// @version      5.0
+// @version      5.2
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
 // @author       Larch4
 // @match        https://space.bilibili.com/*
@@ -14,11 +14,12 @@
 (function () {
     'use strict';
 
-    const FOLLOW_INTERVAL_DEFAULT = 3000; // 关注时间间隔（默认3秒）
-    const UNFOLLOW_INTERVAL_DEFAULT = 3000; // 取消关注时间间隔（默认3秒）
+    const FOLLOW_INTERVAL_DEFAULT = 0; // 关注时间间隔（默认0秒）
+    const UNFOLLOW_INTERVAL_DEFAULT = 0; // 取消关注时间间隔（默认0秒）
 
     let timeoutId = null;
     let isRunning = false;
+    let useRandomInterval = true; // 是否使用随机间隔
     let followInterval = FOLLOW_INTERVAL_DEFAULT;
     let unfollowInterval = UNFOLLOW_INTERVAL_DEFAULT;
 
@@ -65,6 +66,14 @@ function createPanel() {
                 ">
             </div>
 
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <input id="useRandomInterval" type="checkbox" checked style="margin-right: 8px;">
+                <label for="useRandomInterval" style="font-size: 14px; color: #333; cursor: pointer;">
+                    使用随机时间间隔
+                </label>
+        </div>
+
+
             <div id="logContainer" style="
                 max-height: 120px; overflow-y: auto; border: 1px solid #ddd; padding: 5px; margin-top: 10px; border-radius: 4px;
                 font-size: 12px; color: #333; background-color: #f9f9f9;
@@ -96,6 +105,10 @@ function createPanel() {
         }
         isFolded = !isFolded;
     });
+
+    // 绑定按钮和复选框事件
+    document.getElementById('toggleButton').addEventListener('click', toggleScript);
+    document.getElementById('useRandomInterval').addEventListener('change', toggleRandomInterval);
 
     panel.querySelector('#followIntervalInput').addEventListener('input', (e) => {
         followInterval = parseInt(e.target.value, 10) * 1000;
@@ -170,6 +183,11 @@ function makePanelDraggable(panel) {
         updateUI('开始', '#00a1d6', '未运行');
     }
 
+    // 切换随机间隔选项
+    function toggleRandomInterval() {
+        useRandomInterval = document.getElementById('useRandomInterval').checked;
+    }
+
     function updateUI(buttonText, buttonColor, statusTextValue) {
         const toggleButton = document.getElementById('toggleButton');
         const statusText = document.getElementById('statusText');
@@ -181,10 +199,11 @@ function makePanelDraggable(panel) {
     function toggleFollowState(action) {
         followOrUnfollow(action);
         const nextAction = action === 0 ? 1 : 0;
-        const delay = action === 0 ? unfollowInterval : followInterval;
+        const delay = getInterval(action === 0 ? unfollowInterval : followInterval); // 使用随机间隔
 
         timeoutId = setTimeout(() => toggleFollowState(nextAction), delay);
     }
+
 
     function followOrUnfollow(action) {
         try {
@@ -213,6 +232,12 @@ function makePanelDraggable(panel) {
         } catch (error) {
             showErrorMessage("执行关注/取消关注时出错: " + error.message);
         }
+    }
+
+    function getInterval(baseInterval) {
+        let interval = useRandomInterval ? baseInterval + Math.random() * 5000 : baseInterval;
+        console.log(`当前间隔时间: ${interval} 毫秒`); // 输出当前间隔时间
+        return interval;
     }
 
     function logMessage(message) {
