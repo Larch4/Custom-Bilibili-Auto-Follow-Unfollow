@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
 // @namespace    https://github.com/Larch4/Custom-Bilibili-Auto-Follow-Unfollow
-// @version      5.2
+// @version      5.3
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
 // @author       Larch4
 // @match        https://space.bilibili.com/*
@@ -257,6 +257,16 @@ function makePanelDraggable(panel) {
             }, 3000);
         }
     }
+
+    function removeModal() {
+        const modal = document.querySelector('.modal-container');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    
+    // 每隔一段时间检查并移除弹窗
+    setInterval(removeModal, 1000); // 每秒检查一次    
 
     const { toggleButton, statusText, errorMessage, logContainer } = createPanel();
 })();
