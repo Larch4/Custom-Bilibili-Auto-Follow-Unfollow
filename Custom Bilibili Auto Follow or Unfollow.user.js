@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
 // @namespace    https://github.com/Larch4/Custom-Bilibili-Auto-Follow-Unfollow
-// @version      5.3
+// @version      5.4
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
 // @author       Larch4
 // @match        https://space.bilibili.com/*
@@ -20,6 +20,8 @@
     let timeoutId = null;
     let isRunning = false;
     let useRandomInterval = true; // 是否使用随机间隔
+    let followUnfollowTimeout = null; // 关注/取消关注的定时器
+    let modalCheckInterval = null; // 弹窗检查的定时器
     let followInterval = FOLLOW_INTERVAL_DEFAULT;
     let unfollowInterval = UNFOLLOW_INTERVAL_DEFAULT;
 
@@ -67,7 +69,7 @@ function createPanel() {
             </div>
 
         <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <input id="useRandomInterval" type="checkbox" checked style="margin-right: 8px;">
+                <input id="useRandomInterval" type="checkbox" checked style="margin-right: 9px;">
                 <label for="useRandomInterval" style="font-size: 14px; color: #333; cursor: pointer;">
                     使用随机时间间隔
                 </label>
@@ -175,12 +177,21 @@ function makePanelDraggable(panel) {
 
     function startAutoFollowUnfollow() {
         toggleFollowState(1); // 开始时默认进入关注状态
+        modalCheckInterval = setInterval(removeModal, 1000); // 启动弹窗检查定时器
         updateUI('暂停', '#f25d8e', '运行中');
     }
-
+    
     function stopAutoFollowUnfollow() {
-        clearTimeout(timeoutId);
+        clearTimeout(followUnfollowTimeout);
+        clearInterval(modalCheckInterval); // 清除弹窗检查定时器
         updateUI('开始', '#00a1d6', '未运行');
+    }    
+
+    function removeModal() {
+        const modal = document.querySelector('.modal-container');
+        if (modal) {
+            modal.remove();
+        }
     }
 
     // 切换随机间隔选项
@@ -200,10 +211,9 @@ function makePanelDraggable(panel) {
         followOrUnfollow(action);
         const nextAction = action === 0 ? 1 : 0;
         const delay = getInterval(action === 0 ? unfollowInterval : followInterval); // 使用随机间隔
-
-        timeoutId = setTimeout(() => toggleFollowState(nextAction), delay);
-    }
-
+    
+        followUnfollowTimeout = setTimeout(() => toggleFollowState(nextAction), delay);
+    }    
 
     function followOrUnfollow(action) {
         try {
@@ -256,17 +266,7 @@ function makePanelDraggable(panel) {
                 errorMessage.textContent = '';
             }, 3000);
         }
-    }
-
-    function removeModal() {
-        const modal = document.querySelector('.modal-container');
-        if (modal) {
-            modal.remove();
-        }
-    }
-    
-    // 每隔一段时间检查并移除弹窗
-    setInterval(removeModal, 1000); // 每秒检查一次    
+    }   
 
     const { toggleButton, statusText, errorMessage, logContainer } = createPanel();
 })();
