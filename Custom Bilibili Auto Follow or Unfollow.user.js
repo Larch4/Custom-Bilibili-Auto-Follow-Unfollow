@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
 // @namespace    https://github.com/Larch4/Custom-Bilibili-Auto-Follow-Unfollow
-// @version      5.4
+// @version      5.5
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
 // @author       Larch4
 // @match        https://space.bilibili.com/*
@@ -14,8 +14,8 @@
 (function () {
     'use strict';
 
-    const FOLLOW_INTERVAL_DEFAULT = 0; // 关注时间间隔（默认0秒）
-    const UNFOLLOW_INTERVAL_DEFAULT = 0; // 取消关注时间间隔（默认0秒）
+    const FOLLOW_INTERVAL_DEFAULT = 2000; // 关注时间间隔（默认2秒）
+    const UNFOLLOW_INTERVAL_DEFAULT = 2000; // 取消关注时间间隔（默认2秒）
 
     let timeoutId = null;
     let isRunning = false;
@@ -245,7 +245,7 @@ function makePanelDraggable(panel) {
     }
 
     function getInterval(baseInterval) {
-        let interval = useRandomInterval ? baseInterval + Math.random() * 5000 : baseInterval;
+        let interval = useRandomInterval ? baseInterval + Math.random() * 1000 : baseInterval;
         console.log(`当前间隔时间: ${interval} 毫秒`); // 输出当前间隔时间
         return interval;
     }
