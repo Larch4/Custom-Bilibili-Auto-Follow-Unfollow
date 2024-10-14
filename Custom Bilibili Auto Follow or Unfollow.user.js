@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
 // @namespace    https://github.com/Larch4/Custom-Bilibili-Auto-Follow-Unfollow
-// @version      5.6
+// @version      5.7
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
 // @author       Larch4
 // @match        https://space.bilibili.com/*
@@ -17,11 +17,12 @@
     const FOLLOW_INTERVAL_DEFAULT = 2000; // 关注时间间隔（默认2秒）
     const UNFOLLOW_INTERVAL_DEFAULT = 2000; // 取消关注时间间隔（默认2秒）
 
-    let timeoutId = null;
     let isRunning = false;
     let useRandomInterval = true; // 是否使用随机间隔
     let followUnfollowTimeout = null; // 关注/取消关注的定时器
     let modalCheckInterval = null; // 弹窗检查的定时器
+    let captchaModalInterval = null; //
+    /* let modalCheckIntervalIfNeeded = null; //验证码弹窗检查定时器 */
     let followInterval = FOLLOW_INTERVAL_DEFAULT;
     let unfollowInterval = UNFOLLOW_INTERVAL_DEFAULT;
     const MAX_LOGS = 10; // 日志最大数量为10条
@@ -33,7 +34,7 @@
         panel.style.cssText = `
             position: fixed; bottom: 20px; right: 20px;
             background-color: #fff; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            color: #333; padding: 15px; border-radius: 10px; z-index: 10000;
+            color: #333; padding: 15px; border-radius: 10px; z-index: 2147483647;
             display: flex; flex-direction: column; align-items: stretch; width: 240px;
             font-family: Arial, sans-serif; transition: max-height 0.3s ease, opacity 0.3s ease;
             overflow: hidden; max-height: 400px;
@@ -166,19 +167,36 @@
     function startAutoFollowUnfollow() {
         toggleFollowState(1);
         modalCheckInterval = setInterval(removeModal, 1000);
+        captchaModalInterval = setInterval(geetest, 1000);
+        /* modalCheckIntervalIfNeeded = setInterval(removeAllModalsIfNeeded, 1000); */
         updateUI('暂停', '#f25d8e', '运行中');
     }
 
     function stopAutoFollowUnfollow() {
         clearTimeout(followUnfollowTimeout);
         clearInterval(modalCheckInterval);
+        clearInterval(captchaModalInterval);
+        /* clearInterval(modalCheckIntervalIfNeeded); */
         updateUI('开始', '#00a1d6', '未运行');
     }
 
     function removeModal() {
-        const modal = document.querySelector('.modal-container');
-        if (modal) {
-            modal.remove();
+        const modals = document.querySelectorAll('.modal-container, .be-toast');
+        modals.forEach(modal => modal.remove()); // 移除所有匹配的面板
+    }
+
+/*    function removeAllModalsIfNeeded() {
+        const modals = document.querySelectorAll('.geetest_panel, .geetest_wind'); // 选择验证码的容器
+        modals.forEach(modal => modal.remove()); // 移除所有匹配的验证码面板
+    }    
+*/
+
+    function geetest() {
+        const captchaModal = document.querySelector('.geetest_panel, .geetest_wind');
+        const myPanel = document.getElementById('bilibili-auto-follow-panel');
+        if (captchaModal && myPanel) {
+            captchaModal.style.zIndex = '-2147483648'; // 保持验证码在你的面板之下
+            myPanel.style.zIndex = '2147483647'; // 保证你的面板在最上层
         }
     }
 
@@ -199,7 +217,8 @@
         const nextAction = action === 0 ? 1 : 0;
         const delay = getInterval(action === 0 ? unfollowInterval : followInterval);
 
-        followUnfollowTimeout = setTimeout(() => toggleFollowState(nextAction), delay);
+        followUnfollowTimeout = setTimeout(() => toggleFollowState(nextAction) , delay);
+        
     }
 
     function followOrUnfollow(action) {
@@ -266,5 +285,5 @@
         }
     }
 
-    const { toggleButton, statusText, errorMessage, logContainer } = createPanel();
+    createPanel();
 })();
