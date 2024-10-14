@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
-// @namespace    https://github.com/Larch4/Custom-Bilibili-Auto-Follow-Unfollow
+// @namespace    https://github.com/IGCrystal/Custom-Bilibili-Auto-Follow-Unfollow/
 // @version      5.7
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
-// @author       Larch4
+// @author       Larch4, IGCrystal
 // @match        https://space.bilibili.com/*
 // @grant        none
 // @license      GNU Affero General Public License v3.0
-// @downloadURL https://update.greasyfork.org/scripts/504985/Custom%20Bilibili%20Auto%20FollowUnfollow.user.js
-// @updateURL https://update.greasyfork.org/scripts/504985/Custom%20Bilibili%20Auto%20FollowUnfollow.meta.js
+// @downloadURL https://update.greasyfork.org/scripts/512572/Custom%20Bilibili%20Auto%20FollowUnfollow.user.js
+// @updateURL https://update.greasyfork.org/scripts/512572/Custom%20Bilibili%20Auto%20FollowUnfollow.meta.js
 // ==/UserScript==
 
 (function () {
@@ -188,7 +188,7 @@
 /*    function removeAllModalsIfNeeded() {
         const modals = document.querySelectorAll('.geetest_panel, .geetest_wind'); // 选择验证码的容器
         modals.forEach(modal => modal.remove()); // 移除所有匹配的验证码面板
-    }    
+    }
 */
 
     function geetest() {
@@ -218,7 +218,7 @@
         const delay = getInterval(action === 0 ? unfollowInterval : followInterval);
 
         followUnfollowTimeout = setTimeout(() => toggleFollowState(nextAction) , delay);
-        
+
     }
 
     function followOrUnfollow(action) {
@@ -284,6 +284,9 @@
             }, 3000);
         }
     }
+
+    createPanel();
+})();
 
     createPanel();
 })();
