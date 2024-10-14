@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
 // @namespace    https://github.com/IGCrystal/Custom-Bilibili-Auto-Follow-Unfollow/
-// @version      5.7
+// @version      5.8
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
 // @author       Larch4, IGCrystal
 // @match        https://space.bilibili.com/*
