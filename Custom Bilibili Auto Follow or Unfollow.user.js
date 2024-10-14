@@ -287,6 +287,3 @@
 
     createPanel();
 })();
-
-    createPanel();
-})();
