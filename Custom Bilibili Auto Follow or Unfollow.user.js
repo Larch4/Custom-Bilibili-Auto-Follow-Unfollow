@@ -380,6 +380,3 @@ window.addEventListener('load', () => {
 
     createPanel();
 })();
-
-    createPanel();
-})();
