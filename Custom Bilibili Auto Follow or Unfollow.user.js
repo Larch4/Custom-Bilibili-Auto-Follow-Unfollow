@@ -32,7 +32,7 @@
     let previousState = null;
     let checkButtonIfRuning = null;
     let checkIntervaling = 3000; // 每3秒检查一次
-    let maxWaitTime = 30000; // 最大等待时间为15秒
+    let maxWaitTime = 15000; // 最大等待时间为15秒
     let elapsedTime = 0;
 
 // 确保页面刷新后创建面板并恢复状态
