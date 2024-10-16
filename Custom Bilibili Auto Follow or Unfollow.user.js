@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
 // @namespace    https://github.com/IGCrystal/Custom-Bilibili-Auto-Follow-Unfollow/
-// @version      5.9
+// @version      5.9.1
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
 // @author       Larch4, IGCrystal
 // @match        https://space.bilibili.com/*
@@ -32,28 +32,35 @@
     let previousState = null;
     let checkButtonIfRuning = null;
     let checkIntervaling = 3000; // 每3秒检查一次
-    let maxWaitTime = 15000; // 最大等待时间为15秒
+    let maxWaitTime = 30000; // 最大等待时间为15秒
     let elapsedTime = 0;
 
-// 确保页面刷新后创建面板并恢复状态
-window.addEventListener('load', () => {
-    // 检查是否是页面刷新，performance.navigation.type === 1 表示刷新
-    if (performance.navigation.type === 1) {
+    // 检测页面是否是刷新加载
+    let isPageReload = performance.navigation.type === 1;
+
+    // 确保页面刷新后创建面板并根据情况恢复状态
+    window.addEventListener('load', () => {
         // 检查面板是否已经存在，避免重复创建
         if (!document.getElementById('bilibili-auto-follow-panel')) {
             createPanel(); // 每次页面加载时创建面板
         }
-        // 只有在页面刷新时恢复脚本运行状态
-        if (localStorage.getItem('scriptRunning') === 'true') {
+
+        // 仅当页面是刷新时，才恢复脚本运行状态
+        if (isPageReload && localStorage.getItem('scriptRunning') === 'true') {
             isRunning = true;
             startAutoFollowUnfollow();
+        } else {
+            // 页面重新打开时，脚本默认不运行
+            isRunning = false;
+            localStorage.removeItem('scriptRunning');
         }
-    } else {
-        // 如果不是刷新，则默认未运行
-        isRunning = false;
-        localStorage.removeItem('scriptRunning'); // 清除运行状态，确保新页面不会自动运行
-    }
-});
+    });
+
+    // 在页面刷新或关闭前保存当前的运行状态
+    window.addEventListener('beforeunload', () => {
+        localStorage.setItem('scriptRunning', isRunning.toString());
+    });
+
 
     function createPanel() {
         const panel = document.createElement('div');
