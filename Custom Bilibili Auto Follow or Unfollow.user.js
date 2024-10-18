@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Custom Bilibili Auto Follow/Unfollow
 // @namespace    https://github.com/IGCrystal/Custom-Bilibili-Auto-Follow-Unfollow/
-// @version      5.9.2
+// @version      5.9.3
 // @description  A script to automatically follow/unfollow on Bilibili with enhanced UI and controls.
 // @author       Larch4, IGCrystal
 // @match        https://space.bilibili.com/*
@@ -32,7 +32,7 @@
     let previousState = null;
     let checkButtonIfRuning = null;
     let checkIntervaling = 3000; // 每3秒检查一次
-    let maxWaitTime = 12000; // 最大等待时间为12秒
+    let maxWaitTime = 54000; // 最大等待时间为12秒
     let elapsedTime = 0;
 
     // 检测页面是否是刷新加载
