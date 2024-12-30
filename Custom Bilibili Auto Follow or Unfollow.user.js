@@ -76,41 +76,166 @@
         `;
 
         panel.innerHTML = `
-            <div style="font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; color: #00a1d6;">
-                Bilibili 自动关注脚本
-                <button id="foldButton" style="
-                    background-color: #00a1d6; color: #fff; border: none; padding: 6px 10px;
-                    border-radius: 6px; cursor: pointer; font-size: 14px; transition: background-color 0.3s; align-self: center; margin-bottom: 0px; margin-left: 20px;">展开</button>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <button id="toggleButton" style="
-                    flex: 1; background-color: #00a1d6; color: #fff; border: none; padding: 8px 12px;
-                    border-radius: 6px; cursor: pointer; font-size: 14px; transition: background-color 0.3s;
-                ">开始</button>
-                <span id="statusText" style="flex: 1; margin-left: 105px; font-size: 14px; color: #666;">未运行</span>
-            </div>
-            <div id="additionalContent" style="max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.5s ease;">
-                <div style="margin-bottom: 10px; display: flex; flex-direction: column;">
-                    <label>关注间隔（秒）：</label>
-                    <input id="followIntervalInput" type="number" min="1" value="${FOLLOW_INTERVAL_DEFAULT / 1000}" style="
-                        width: 95%; padding: 5px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
-                </div>
-                <div style="margin-bottom: 10px; display: flex; flex-direction: column;">
-                    <label>取消关注间隔（秒）：</label>
-                    <input id="unfollowIntervalInput" type="number" min="1" value="${UNFOLLOW_INTERVAL_DEFAULT / 1000}" style="
-                        width: 95%; padding: 5px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
-                </div>
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <input id="useRandomInterval" type="checkbox" checked style="margin-right: 9px;">
-                    <label for="useRandomInterval" style="font-size: 14px; color: #333; cursor: pointer;">
-                        使用随机时间间隔
-                    </label>
-                </div>
-                <div id="logContainer" style="
-                    max-height: 120px; overflow-y: auto; border: 1px solid #ddd; padding: 5px; margin-top: 10px; border-radius: 4px;
-                    font-size: 12px; color: #333; background-color: #f9f9f9;"></div>
-            </div>
-            <div id="errorMessage" style="color: red; font-size: 12px; margin-top: 10px;"></div>
+<div id="panelHeader" 
+     style="
+       display: flex; 
+       align-items: center; 
+       justify-content: space-between; 
+       margin-bottom: 10px;
+     "
+>
+  <!-- 左侧：标题 -->
+  <div style="
+    font-size: 16px;
+    font-weight: bold;
+    color: #00a1d6;
+    margin-bottom: 0;
+  ">
+    Bilibili 自动关注脚本
+  </div>
+
+  <!-- 右侧：展开/收缩按钮 -->
+  <button
+    id="foldButton"
+    style="
+      background-color: #00a1d6;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      margin-left: 10px;
+    "
+  >
+    展开
+  </button>
+</div>
+
+<!-- 第二行：开始/暂停按钮 + 状态文字 -->
+<div 
+  style="
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 5px;
+  "
+>
+  <button 
+    id="toggleButton" 
+    style="
+      flex: 1; 
+      background-color: #00a1d6; 
+      color: #fff; 
+      border: none; 
+      padding: 8px 12px;
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-size: 14px; 
+      transition: background-color 0.3s;
+    "
+  >
+    开始
+  </button>
+  <span 
+    id="statusText" 
+    style="
+      flex: 1; 
+      margin-left: 95px; 
+      font-size: 14px; 
+      color: #666;
+    "
+  >
+    未运行
+  </span>
+</div>
+
+<!-- 第三行：可折叠区域 -->
+<div 
+  id="additionalContent" 
+  style="
+    max-height: 0; 
+    opacity: 0; 
+    overflow: hidden; 
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+  "
+>
+  <div style="margin-bottom: 20px; display: flex; flex-direction: column;">
+    <label>关注间隔（秒）：</label>
+    <input 
+      id="followIntervalInput" 
+      type="number" 
+      min="1" 
+      value="${FOLLOW_INTERVAL_DEFAULT / 1000}" 
+      style="
+        width: 95%;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      "
+    />
+  </div>
+  <div style="margin-bottom: 20px; display: flex; flex-direction: column;">
+    <label>取消关注间隔（秒）：</label>
+    <input 
+      id="unfollowIntervalInput" 
+      type="number" 
+      min="1" 
+      value="${UNFOLLOW_INTERVAL_DEFAULT / 1000}" 
+      style="
+        width: 95%;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      "
+    />
+  </div>
+  <div style="display: flex; align-items: center; margin-bottom: 20px;">
+    <input 
+      id="useRandomInterval" 
+      type="checkbox" 
+      checked 
+      style="margin-right: 9px;"
+    />
+    <label 
+      for="useRandomInterval" 
+      style="
+        font-size: 14px; 
+        color: #333; 
+        cursor: pointer;
+      "
+    >
+      使用随机时间间隔
+    </label>
+  </div>
+  <div 
+    id="logContainer" 
+    style="
+      max-height: 120px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 5px;
+      margin-top: 20px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #333;
+      background-color: #f9f9f9;
+    "
+  ></div>
+</div>
+
+<!-- 错误消息提示区 -->
+<div 
+  id="errorMessage" 
+  style="
+    color: red; 
+    font-size: 12px; 
+    margin-top: 20px;
+  "
+></div>
         `;
 
         document.body.appendChild(panel);
@@ -252,27 +377,38 @@
 
 
     function checkButtonStatus() { 
-        const followButton = document.querySelector('.h-f-btn.h-follow'); 
-        const unfollowButton = document.querySelector('.h-f-btn.h-unfollow'); 
+        const followBtn = document.querySelector('.follow-btn-wrapper .space-follow-btn');
         let currentState;
     
-        if (followButton) {
-            currentState = '已关注'; // 未关注状态
-        } else if (unfollowButton) {
-            currentState = '未关注'; // 已关注状态
+        if (!followBtn) {
+            // 如果页面里连这个按钮都找不到，可能是还没加载或 DOM 改动
+            currentState = 'error';
         } else {
-            currentState = 'error'; // 可能出错
+            // 读取文本
+            const btnText = followBtn.textContent.trim();
+            // 举例：若包含“关注”，则判定为未关注
+            if (btnText.includes('关注') && !btnText.includes('已关注')) {
+                currentState = '未关注';
+            }
+            // 若包含“已关注”，则判定为已关注
+            else if (btnText.includes('已关注')) {
+                currentState = '已关注';
+            } 
+            // 如果以上都没匹配到，就可能是 B 站又改了文案，或网络加载中
+            else {
+                currentState = 'unknown';
+            }
         }
     
-        // 如果按钮状态和上次的状态不一样，重置计时器
+        // 下面保持你原先的逻辑不变
         if (currentState !== previousState) {
             previousState = currentState;
             elapsedTime = 0; // 状态改变，重置时间
-            console.log(`状态发生变化`);
+            console.log('状态发生变化:', currentState);
         } else {
             // 状态没有变化，增加经过时间
             elapsedTime += checkIntervaling;
-            logMessage(`状态未变化，已等待时间: ${elapsedTime / 1000} 秒`);
+            logMessage(`状态“${currentState}”未变化，已等待时间: ${elapsedTime / 1000} 秒`);
             
             // 如果超过最大等待时间，触发网络错误处理
             if (elapsedTime >= maxWaitTime) {
@@ -280,6 +416,7 @@
             }
         }
     }
+    
     
     function handleNetworkError() {
         showErrorMessage("关注按钮未按预期变化，即将刷新页面");
@@ -323,32 +460,39 @@
 
     function followOrUnfollow(action) {
         try {
-            let button;
-            if (action === 0) {
-                const dropdown = document.querySelector('.be-dropdown.h-f-btn.h-unfollow');
-                if (dropdown) {
-                    const dropdownMenu = dropdown.querySelector('.be-dropdown-menu');
-                    if (dropdownMenu && dropdownMenu.style.display === 'none') {
-                        dropdownMenu.style.display = 'block';
-                    }
-
-                    button = dropdownMenu ? Array.from(dropdownMenu.querySelectorAll('.be-dropdown-item'))
-                        .find(item => item.textContent.trim() === '取消关注') : null;
+          if (action === 1) {
+            // 1 表示“关注”
+            const followBtn = findFollowButton(); // 如上定义
+            if (followBtn) {
+              followBtn.click();
+              logMessage('已进行关注');
+            } else {
+              showErrorMessage('未找到关注按钮');
+            }
+          } else {
+            // 0 表示“取消关注”
+            // 这里先点击“已关注”按钮，再点下拉的“取消关注”
+            const followBtn = document.querySelector('.space-follow-btn');
+            if (followBtn) {
+              followBtn.click(); 
+              setTimeout(() => {
+                const menuItem = findUnfollowMenuItem();
+                if (menuItem) {
+                  menuItem.click();
+                  logMessage('已进行取消关注');
+                } else {
+                  showErrorMessage('未找到“取消关注”菜单项');
                 }
+              }, 500);
             } else {
-                button = document.querySelector(".h-f-btn.h-follow");
+              showErrorMessage('未找到已关注按钮');
             }
-
-            if (button && button.offsetParent !== null) {
-                button.click();
-                logMessage(`已进行${action === 0 ? '取消关注' : '关注'}一个UP主`);
-            } else {
-                showErrorMessage(`未找到${action === 1 ? '' : '取消'}关注按钮`);
-            }
+          }
         } catch (error) {
-            showErrorMessage("执行关注/取消关注时出错: " + error.message);
+          showErrorMessage("执行关注/取消关注时出错: " + error.message);
         }
-    }
+      }
+      
 
     function getInterval(baseInterval) {
         let interval = useRandomInterval ? baseInterval + Math.random() * 1000 : baseInterval;
